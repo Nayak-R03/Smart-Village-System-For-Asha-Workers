@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Update Family Details - SVHRS</title>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+</head>
+<body class="sv-theme">
+<div class="center">
+    <div class="form-container">
+        <h2>Update Family Members</h2>
+
+        <div th:if="${param.success}" class="success">
+            <p th:text="${param.success == 'head_replaced' ? 'Family head replaced successfully!' : 'Operation completed successfully!'}"></p>
+        </div>
+
+        <div class="card">
+            <h3>Family Head: <span th:text="${head != null ? head.name : 'N/A'}"></span></h3>
+            
+            <table class="styled-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>DOB</th>
+                        <th>Gender</th>
+                        <th>Relation</th>
+                        <th>Spouse</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Head Row -->
+                    <tr th:if="${head != null}">
+                        <td th:text="${head.id}"></td>
+                        <td th:text="${head.name}"></td>
+                        <td th:text="${head.dob}"></td>
+                        <td th:text="${head.gender}"></td>
+                        <td th:text="${head.relation}"></td>
+                        <td th:text="${head.spouse != null ? head.spouse : 'N/A'}"></td>
+                        <td>
+                            <a class="btn primary" th:href="@{'/family/updateMember/' + ${head.id}}">Update</a>
+                            <!-- ✅ NEW: Delete button for head -->
+                            <a class="btn danger" th:href="@{'/family/deleteHead/' + ${headId}}" 
+                               style="margin-left: 5px;">Delete Head</a>
+                        </td>
+                    </tr>
+                    <!-- Member Rows -->
+                    <tr th:each="member : ${members}">
+                        <td th:text="${member.id}"></td>
+                        <td th:text="${member.name}"></td>
+                        <td th:text="${member.dob}"></td>
+                        <td th:text="${member.gender}"></td>
+                        <td th:text="${member.relation}"></td>
+                        <td th:text="${member.spouse != null ? member.spouse : 'N/A'}"></td>
+                        <td>
+                            <a class="btn primary" th:href="@{'/family/updateMember/' + ${member.id}}">Update</a>
+                            <!-- ✅ Direct delete for members (no prompt) -->
+                            <form th:action="@{'/family/delete/' + ${member.id}}" method="post" style="display:inline; margin-left: 5px;">
+                                <button type="submit" class="btn danger">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="buttons">
+            <a class="btn primary" th:href="@{'/family/addMember/' + ${headId} + '?from=update'}">Add Member</a>
+            <a class="btn secondary" th:href="@{/family/update}">Back to Family List</a>
+            <a class="btn secondary" th:href="@{/asha/dashboard}">Back to Dashboard</a>
+        </div>
+    </div>
+</div>
+</body>
+</html>

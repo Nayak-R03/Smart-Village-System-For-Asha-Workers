@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>View Families - SVHRS</title>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+</head>
+<body class="sv-theme">
+<div class="center">
+    <div class="form-container">
+        <h2>Family Heads</h2>
+
+        <div class="card">
+            <table class="styled-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>DOB</th>
+                        <th>Gender</th>
+                        <th>Spouse</th>
+                        <th>Father Name</th>
+                        <th>Mother Name</th>
+                        <th>Education</th>
+                        <th>Occupation</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="head : ${heads}">
+                        <td th:text="${head.id}"></td>
+                        <td th:text="${head.name}"></td>
+                        <td th:text="${head.dob}"></td>
+                        <td th:text="${head.gender}"></td>
+                        <td th:text="${head.spouse != null ? head.spouse : 'N/A'}"></td>
+                        <td th:text="${head.fatherName != null ? head.fatherName : 'N/A'}"></td>
+                        <td th:text="${head.motherName != null ? head.motherName : 'N/A'}"></td>
+                        <td th:text="${head.education != null ? head.education : 'N/A'}"></td>
+                        <td th:text="${head.occupation != null ? head.occupation : 'N/A'}"></td>
+                        <td>
+                            <a class="btn primary" th:href="@{'/family/view/' + ${head.headId}}">Open Family</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="buttons">
+            <a class="btn secondary" th:href="@{/asha/dashboard}">Back to Dashboard</a>
+        </div>
+    </div>
+</div>
+</body>
+</html>

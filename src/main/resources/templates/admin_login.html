@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Admin Login - Smart Village System</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+</head>
+<body class="sv-theme">
+<div class="center">
+    <div class="dashboard">
+        <h2>Admin Login</h2>
+        
+        <div class="buttons">
+            <a class="btn primary" th:href="@{/admin/panchayath}">Panchayath Login</a>
+            <a class="btn primary" th:href="@{/admin/healthcare}">Health Care Centre Login</a>
+        </div>
+        
+        <div class="buttons">
+            <a class="btn secondary" th:href="@{/modules}">Back</a>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Healthcare Center Dashboard - Smart Village System</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+</head>
+<body class="sv-theme">
+<div class="center">
+    <div class="dashboard">
+        <h2>Healthcare Center Dashboard</h2>
+
+        <div class="buttons">
+            <a class="btn primary" th:href="@{/admin/healthcare/asha-details}">Asha Details</a>
+            <!-- ✅ FIXED: Changed from healthcare_announcements to announcement -->
+            <a class="btn primary" th:href="@{/admin/healthcare/announcement}">Announcements</a>
+            <a class="btn primary" th:href="@{/admin/healthcare/work-schedules}">Work Schedules</a>
+        </div>
+
+        <div class="buttons">
+            <a class="btn secondary" th:href="@{/admin/login}">Back</a>
+        </div>
+    </div>
+</div>
+</body>
+</html>

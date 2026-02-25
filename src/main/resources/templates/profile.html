@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>SVHRS - My Profile</title>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+</head>
+<body class="sv-theme">
+<div class="center">
+    <div class="form-container">
+        <h2>My Profile</h2>
+
+        <div th:if="${param.success}" class="success">
+            <p>Profile updated successfully.</p>
+        </div>
+
+        <div class="card">
+            <form th:action="@{/profile}" th:object="${asha}" method="post">
+                <label>Asha ID: <input th:value="${asha.ashaId}" readonly/></label>
+                <label>Name: <input th:field="*{name}" required/></label>
+                <label>Date of Birth: <input th:field="*{dob}" type="date" required/></label>
+                <label>Mobile: <input th:field="*{mobile}" required/></label>
+                <label>Email: <input th:field="*{email}" type="email"/></label>
+                <label>State: <input th:field="*{state}" readonly/></label>
+                <label>District: <input th:field="*{district}" readonly/></label>
+                <label>Taluk: <input th:field="*{taluk}" readonly/></label>
+                <label>Village: <input th:field="*{village}" readonly/></label>
+                <label>Ward: <input th:field="*{ward}" readonly/></label>
+                <button type="submit" class="btn success">Save Changes</button>
+            </form>
+        </div>
+
+        <div class="buttons">
+            <a class="btn secondary" th:href="@{/dashboard}">Back to Dashboard</a>
+        </div>
+    </div>
+</div>
+</body>
+</html>

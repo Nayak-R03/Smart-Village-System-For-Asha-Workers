@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Healthcare Center Login - Smart Village System</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+</head>
+<body class="sv-theme">
+<div class="center">
+    <div class="form-container">
+        <h2>Healthcare Center Login</h2>
+        
+        <div th:if="${error}" class="error">
+            <p th:text="${error}"></p>
+        </div>
+
+        <div class="card">
+            <form th:action="@{/admin/healthcare/login}" method="post">
+                <label>Healthcare Center ID: <input name="healthcareId" required/></label>
+                <label>Password: <input type="password" name="password" required/></label>
+                <button type="submit" class="btn success">Login</button>
+            </form>
+        </div>
+        
+        <div class="buttons">
+            <a class="btn secondary" th:href="@{/admin/login}">Back</a>
+        </div>
+    </div>
+</div>
+</body>
+</html>

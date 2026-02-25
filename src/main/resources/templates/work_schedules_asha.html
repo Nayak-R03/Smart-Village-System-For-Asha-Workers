@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Work Schedules - Smart Village System</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+</head>
+<body class="sv-theme">
+<div class="center">
+    <div class="form-container">
+        <h2>Work Schedules</h2>
+        
+        <div th:if="${schedules != null and !schedules.empty}">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Work</th>
+                        <th>Place</th>
+                        <th>Hours</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="schedule : ${schedules}">
+                        <td th:text="${schedule.work}"></td>
+                        <td th:text="${schedule.place}"></td>
+                        <td th:text="${schedule.hours}"></td>
+                        <td th:text="${schedule.workDate}"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div th:if="${schedules == null or schedules.empty}" class="error">
+            <p>No work schedules assigned.</p>
+        </div>
+        
+        <div class="buttons">
+            <a class="btn secondary" th:href="@{/dashboard}">Back to Dashboard</a>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,70 @@
+:root{
+  --blue:
+#0a2540;
+  --green:
+#1abc9c;
+  --text:
+#ffffff;
+  --muted:
+#d0e7e4;
+  --dark-blue:
+#0d1b2a;
+}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0;font-family:Arial,Helvetica,sans-serif}
+.sv-theme{background: linear-gradient(135deg,var(--blue) 50%, var(--green));color:var(--text);min-height:100vh}
+.center{display:flex;align-items:center;justify-content:center;text-align:center;min-height:100vh;flex-direction:column}
+.hero{padding:40px}
+.hero h1{font-size:40px;margin:0 0 10px;text-shadow:2px 2px 4px rgba(0,0,0,0.3)}
+.modules h2{margin-bottom:20px;font-size:28px}
+.buttons{display:flex;gap:16px;flex-wrap:wrap;justify-content:center;margin:20px 0}
+.btn{display:inline-block;padding:12px 24px;border-radius:8px;border:2px solid var(--muted);color:var(--text);text-decoration:none;font-weight:bold;transition:all 0.3s ease;margin:8px;min-width:150px;text-align:center}
+.btn:hover{transform:translateY(-2px);box-shadow:0 4px 8px rgba(0,0,0,0.3)}
+.btn.primary{background:var(--green);border-color:var(--green)}
+.btn.primary:hover{background:var(--muted);color:var(--blue)}
+.btn.secondary{background:transparent;border-color:var(--muted)}
+.btn.secondary:hover{background:var(--muted);color:var(--blue)}
+.btn.danger{background:
+#e74c3c;border-color:
+#e74c3c}
+.btn.danger:hover{background:
+#c0392b}
+.btn.success{background:
+#27ae60;border-color:
+#27ae60}
+.btn.success:hover{background:
+#229954}
+.card{background:rgba(255,255,255,0.1);padding:24px;border-radius:12px;display:inline-block;backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,0.2)}
+.dashboard{max-width:800px;margin:0 auto;padding:20px}
+.dashboard h2{text-align:center;margin-bottom:30px;font-size:32px}
+.dashboard ul{list-style:none;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px}
+.dashboard li{margin:0}
+.dashboard li a{display:block;width:100%}
+.form-container{max-width:600px;margin:0 auto;padding:20px}
+.form-container h2{text-align:center;margin-bottom:20px}
+table{width:100%;border-collapse:collapse;margin:20px 0;background:rgba(255,255,255,0.1);border-radius:8px;overflow:hidden}
+th,td{padding:12px;text-align:left;border-bottom:1px solid rgba(255,255,255,0.2)}
+th{background:rgba(255,255,255,0.2);font-weight:bold}
+tr:hover{background:rgba(255,255,255,0.05)}
+.search-container{margin:20px 0;text-align:center}
+.search-container input{padding:10px;border-radius:6px;border:1px solid var(--muted);background:rgba(255,255,255,0.1);color:var(--text);width:300px;max-width:100%}
+.search-container input::placeholder{color:var(--muted)}
+label{display:block;margin:8px 0;font-weight:bold}
+input,select,button,textarea{padding:10px;border-radius:6px;border:1px solid var(--muted);background:rgba(255,255,255,0.1);color:var(--text);width:100%;max-width:400px}
+input::placeholder,textarea::placeholder{color:var(--muted)}
+select option{color:#000;background:#fff}
+button{cursor:pointer;font-weight:bold;transition:all 0.3s ease}
+button:hover{transform:translateY(-1px);box-shadow:0 2px 4px rgba(0,0,0,0.3)}
+.back-btn{position:fixed;top:20px;left:20px;z-index:1000}
+.error{color:
+#e74c3c;background:rgba(231,76,60,0.1);padding:10px;border-radius:6px;margin:10px 0}
+.success{color:
+#27ae60;background:rgba(39,174,96,0.1);padding:10px;border-radius:6px;margin:10px 0}
+
+.btn.primary, .btn.success, button[type="submit"] {
+  color: #ffffff !important;
+}
+
+.btn.primary:hover, .btn.success:hover, button[type="submit"]:hover {
+  color: #ffffff !important;
+}

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Work Schedules - Smart Village System</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+</head>
+<body class="sv-theme">
+<div class="center">
+    <div class="form-container">
+        <h2>Work Schedules</h2>
+        
+        <div class="card">
+            <form th:action="@{/admin/healthcare/work-schedules}" method="post">
+                <label>ASHA Name: 
+                    <select name="ashaId" required>
+    <option value="">--Select ASHA--</option>
+    <option th:each="asha : ${ashas}"
+            th:value="${asha.ashaId}"
+            th:text="${asha.name}">
+    </option>
+</select>
+
+
+                </label>
+                <label>Work: <input name="work" placeholder="Work description" required/></label>
+                <label>Place: <input name="place" placeholder="Work location" required/></label>
+                <label>Hours: <input name="hours" type="number" placeholder="Number of hours" required/></label>
+                <label>Date: <input name="workDate" type="date" required/></label>
+                <button type="submit" class="btn success">Submit Schedule</button>
+            </form>
+        </div>
+        
+        <div th:if="${schedules != null and !schedules.empty}">
+            <h3>Work Schedules</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ASHA Name</th>
+                        <th>Work</th>
+                        <th>Place</th>
+                        <th>Hours</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="schedule : ${schedules}">
+                        <td th:text="${schedule.ashaName}"></td>
+                        <td th:text="${schedule.work}"></td>
+                        <td th:text="${schedule.place}"></td>
+                        <td th:text="${schedule.hours}"></td>
+                        <td th:text="${schedule.workDate}"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="buttons">
+            <a class="btn secondary" th:href="@{/admin/healthcare/dashboard}">Back to Dashboard</a>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+ 
+ 
+<!-- <!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Work Schedules - Smart Village System</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+</head>
+<body class="sv-theme">
+<div class="center">
+    <div class="form-container">
+        <h2>Work Schedules</h2>
+
+        <div class="card">
+            <form th:action="@{/admin/healthcare/work-schedule}" method="post">
+                <label>ASHA Name:
+                    <select name="ashaId" required>
+                        <option value="">--Select ASHA--</option>
+                        <option th:each="asha : ${ashas}"
+                                th:value="${asha.ashaId}"
+                                th:text="${asha.name}">
+                        </option>
+                    </select>
+                </label>
+
+                <label>Work: <input name="work" placeholder="Work description" required /></label>
+                <label>Place: <input name="place" placeholder="Work location" required /></label>
+                <label>Hours: <input name="hours" type="number" placeholder="Number of hours" required /></label>
+                <label>Date: <input name="workDate" type="date" required /></label>
+
+                <button type="submit" class="btn success">Submit Schedule</button>
+            </form>
+        </div>
+
+        <div th:if="${schedules != null and !schedules.empty}">
+            <h3>Existing Work Schedules</h3>
+            <table>
+                <thead>
+                <tr>
+                    <th>ASHA Name</th>
+                    <th>Work</th>
+                    <th>Place</th>
+                    <th>Hours</th>
+                    <th>Date</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="schedule : ${schedules}">
+                    <td th:text="${schedule.ashaName}"></td>
+                    <td th:text="${schedule.work}"></td>
+                    <td th:text="${schedule.place}"></td>
+                    <td th:text="${schedule.hours}"></td>
+                    <td th:text="${schedule.workDate}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="buttons">
+            <a class="btn secondary" th:href="@{/admin/healthcare/dashboard}">Back to Dashboard</a>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+ --> 

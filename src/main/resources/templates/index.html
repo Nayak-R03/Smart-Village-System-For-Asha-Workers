@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Smart Village System</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+    <script>
+        document.addEventListener('DOMContentLoaded', function(){
+            let startY = null;
+            const onTouchStart = e => startY = e.touches[0].clientY;
+            const onTouchMove = e => {
+                if (startY === null) return;
+                const diff = startY - e.touches[0].clientY;
+                if (diff > 60) {
+                    window.location.href = '/modules';
+                }
+            };
+            document.addEventListener('touchstart', onTouchStart, {passive:true});
+            document.addEventListener('touchmove', onTouchMove, {passive:true});
+            document.addEventListener('wheel', function(e){ if (e.deltaY > 0) window.location.href = '/modules'; });
+        });
+    </script>
+</head>
+<body class="sv-theme center">
+    <div class="hero">
+        <h1>Smart Village System</h1>
+        <p>Swipe up or scroll to continue</p>
+    </div>
+</body>
+</html>
+
+

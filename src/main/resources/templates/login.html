@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>SVHRS - Login</title>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+</head>
+<body class="sv-theme">
+<div class="center">
+    <div class="form-container">
+        <h2>SVHRS - Login</h2>
+
+        <div th:if="${param.logout}" class="success">
+            <p>You have been logged out.</p>
+        </div>
+        <div th:if="${param.error}" class="error">
+            <p>Invalid credentials.</p>
+        </div>
+
+        <div class="card">
+            <form th:action="@{/login}" method="post">
+                <label>Asha ID: <input name="username" required/></label>
+                <label>Password: <input type="password" name="password" required/></label>
+                <button type="submit" class="btn success">Login</button>
+            </form>
+        </div>
+
+        <div class="buttons">
+            <a href="/register" class="btn primary">Register Here</a>
+            <a href="/forgot-password" class="btn secondary">Forgot Password?</a>
+        </div>
+        
+        <div class="buttons">
+            <a href="/" class="btn secondary">Back to Home</a>
+        </div>
+    </div>
+</div>
+</body>
+</html>

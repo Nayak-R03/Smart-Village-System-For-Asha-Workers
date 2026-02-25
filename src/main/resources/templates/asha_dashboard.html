@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>SVHRS - Dashboard</title>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+</head>
+<body class="sv-theme">
+<div class="center">
+    <div class="dashboard">
+        <h2>Welcome, <span th:text="${asha.name}">Asha</span></h2>
+        
+        <div class="buttons">
+            <a class="btn primary" th:href="@{/profile}">Asha Profile</a>
+            <a class="btn primary" th:href="@{/family/create}">Create Family Head</a>
+            <a class="btn primary" th:href="@{/family/update}">Update Family</a>
+            <a class="btn primary" th:href="@{/family/list}">View Families</a>
+            <a class="btn primary" th:href="@{/report/retrieve}">Retrieve Report</a>
+            <a class="btn primary" th:href="@{/announcements}">Announcements</a>
+            <a class="btn primary" th:href="@{/work-schedules}">Work Schedules</a>
+        </div>
+
+        <div class="buttons">
+            <a class="btn secondary" th:href="@{/modules}">Back</a>
+            <form th:action="@{/logout}" method="post" style="display:inline;">
+                <button type="submit" class="btn danger">Logout</button>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

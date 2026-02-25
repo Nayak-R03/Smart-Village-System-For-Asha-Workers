@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Delete Family Head - SVHRS</title>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+    <style>
+        .option-container {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin: 30px 0;
+        }
+        .option-card {
+            background-color: rgba(255, 255, 255, 0.15);
+            padding: 30px;
+            border-radius: 10px;
+            width: 300px;
+            text-align: center;
+        }
+        .option-card h3 {
+            margin-bottom: 15px;
+            color: #fff;
+        }
+        .option-card p {
+            margin-bottom: 20px;
+            color: #ddd;
+        }
+        .member-select {
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+        .member-radio {
+            display: block;
+            padding: 10px;
+            margin: 10px 0;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .member-radio:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        .member-radio input {
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body class="sv-theme">
+<div class="center">
+    <div class="form-container">
+        <h2>Delete Family Head</h2>
+        
+        <div class="card">
+            <h3>Current Head: <span th:text="${head.name}"></span></h3>
+            <p>Please choose an option:</p>
+        </div>
+
+        <div class="option-container">
+            <!-- Option 1: Delete Entire Family -->
+            <div class="option-card">
+                <h3>Delete Entire Family</h3>
+                <p>This will permanently delete the family head and all family members from the database.</p>
+                <form th:action="@{'/family/deleteFamily/' + ${headId}}" method="post">
+                    <button type="submit" class="btn danger" 
+                            onclick="return confirm('Are you sure you want to delete the entire family? This action cannot be undone!')">
+                        Delete Family
+                    </button>
+                </form>
+            </div>
+
+            <!-- Option 2: Replace Head -->
+            <div class="option-card">
+                <h3>Replace Head</h3>
+                <p>Select a new head from the family members below. The current head will become a regular member.</p>
+                
+                <div th:if="${members != null and !members.empty}" class="member-select">
+                    <form th:action="@{'/family/replaceHead/' + ${headId}}" method="post">
+                        <p><strong>Select New Head:</strong></p>
+                        <div th:each="member : ${members}" class="member-radio">
+                            <label>
+                                <input type="radio" name="newHeadId" th:value="${member.id}" required/>
+                                <span th:text="${member.name + ' (' + member.gender + ', ' + member.dob + ')'}"></span>
+                            </label>
+                        </div>
+                        <button type="submit" class="btn success" style="margin-top: 20px;">
+                            Replace Head
+                        </button>
+                    </form>
+                </div>
+                
+                <div th:if="${members == null or members.empty}" style="color: #ff6b6b;">
+                    <p>No family members available to replace the head.</p>
+                    <p><em>You must delete the entire family.</em></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="buttons">
+            <a class="btn secondary" th:href="@{'/family/update/' + ${headId}}">Cancel</a>
+            <a class="btn secondary" th:href="@{/asha/dashboard}">Back to Dashboard</a>
+        </div>
+    </div>
+</div>
+</body>
+</html>

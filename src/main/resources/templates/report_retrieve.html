@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Retrieve Report - Smart Village System</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
+    <style>
+        .age-filter-section {
+            margin: 15px 0;
+            padding: 15px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+        }
+        .age-filter-section label {
+            margin-right: 15px;
+        }
+        .age-filter-section input, .age-filter-section select {
+            padding: 5px;
+            margin: 0 5px;
+            border-radius: 3px;
+            border: none;
+        }
+        #reportTable {
+            margin-top: 20px;
+            overflow-x: auto;
+        }
+        #dataTable {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        #dataTable th, #dataTable td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        #dataTable th {
+            background-color: #237ea6;
+            color: white;
+        }
+        #dataTable tr:nth-child(even) {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+    </style>
+</head>
+<body class="sv-theme">
+<div class="center">
+    <div class="form-container">
+        <h2>Retrieve Report</h2>
+        
+        <div class="card">
+            <h3>Select Columns for Report</h3>
+            <div class="buttons">
+                <!-- ✅ NEW: Added House No button -->
+                <button class="btn secondary column-btn" data-column="houseNo">House No</button>
+                <button class="btn secondary column-btn" data-column="head">Head</button>
+                <button class="btn secondary column-btn" data-column="name">Name</button>
+                <button class="btn secondary column-btn" data-column="age">Age</button>
+                <button class="btn secondary column-btn" data-column="gender">Gender</button>
+                <button class="btn secondary column-btn" data-column="dob">Date of Birth</button>
+                <button class="btn secondary column-btn" data-column="relation">Relation</button>
+                <button class="btn secondary column-btn" data-column="fatherName">Father Name</button>
+                <button class="btn secondary column-btn" data-column="motherName">Mother Name</button>
+                <button class="btn secondary column-btn" data-column="education">Education</button>
+                <button class="btn secondary column-btn" data-column="occupation">Occupation</button>
+            </div>
+            
+            <div class="age-filter-section" id="ageFilterSection" style="display:none;">
+                <label>Age Filter:</label>
+                <select id="ageFilterType">
+                    <option value="all">All Ages</option>
+                    <option value="range">Age Range</option>
+                </select>
+                <div id="ageRangeInputs" style="display:none; margin-top: 10px;">
+                    <label>Start Age: <input type="number" id="startAge" min="0" max="120" value="0"/></label>
+                    <label>End Age: <input type="number" id="endAge" min="0" max="120" value="120"/></label>
+                </div>
+            </div>
+            
+            <div class="buttons" style="margin-top: 20px;">
+                <button class="btn success" onclick="generateReport()">Retrieve Report</button>
+                <button class="btn primary" id="pdfBtn" onclick="downloadPDF()" style="display:none;">Save as PDF</button>
+            </div>
+        </div>
+        
+        <div id="reportTable" style="display:none;">
+            <h3>Report Data</h3>
+            <div id="reportInfo" style="margin-bottom: 10px;"></div>
+            <table id="dataTable" class="styled-table">
+                <thead id="tableHead"></thead>
+                <tbody id="tableBody"></tbody>
+            </table>
+        </div>
+        
+        <div class="buttons">
+            <a class="btn secondary" th:href="@{/asha/dashboard}">Back to Dashboard</a>
+        </div>
+    </div>
+</div>
+
+<script>
+    let selectedColumns = [];
+    let reportData = [];
+    let headOnlySelected = false;
+    let houseNoMapping = {}; // ✅ NEW: Store house number mapping
+    
+    document.querySelectorAll('.column-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const column = this.dataset.column;
+            if (selectedColumns.includes(column)) {
+                selectedColumns = selectedColumns.filter(c => c !== column);
+                this.classList.remove('primary');
+                this.classList.add('secondary');
+            } else {
+                selectedColumns.push(column);
+                this.classList.remove('secondary');
+                this.classList.add('primary');
+            }
+            
+            // Track head selection
+            if (column === 'head') {
+                headOnlySelected = selectedColumns.includes('head');
+            }
+            
+            // Show/hide age filter section
+            if (column === 'age') {
+                document.getElementById('ageFilterSection').style.display = selectedColumns.includes('age') ? 'block' : 'none';
+            } else {
+                if (!selectedColumns.includes('age')) {
+                    document.getElementById('ageFilterSection').style.display = 'none';
+                }
+            }
+        });
+    });
+    
+    // Handle age filter type change
+    document.getElementById('ageFilterType').addEventListener('change', function() {
+        const ageRangeInputs = document.getElementById('ageRangeInputs');
+        if (this.value === 'range') {
+            ageRangeInputs.style.display = 'block';
+        } else {
+            ageRangeInputs.style.display = 'none';
+        }
+    });
+    
+    function calculateAge(dob) {
+        if (!dob) return 'N/A';
+        const birthDate = new Date(dob);
+        const today = new Date();
+        let age = today.getFullYear() - birthDate.getFullYear();
+        const monthDiff = today.getMonth() - birthDate.getMonth();
+        if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+            age--;
+        }
+        return age;
+    }
+    
+    function formatDate(dateStr) {
+        if (!dateStr) return 'N/A';
+        const date = new Date(dateStr);
+        return date.toLocaleDateString();
+    }
+    
+    // ✅ UPDATED: Get House No from mapping
+    function getColumnValue(member, column) {
+        switch(column) {
+            case 'houseNo': 
+                // Get actual House No from family table mapping
+                return houseNoMapping[member.headId] || member.headId || 'N/A';
+            case 'head': return member.relation === 'Head' ? 'Yes' : 'No';
+            case 'name': return member.name || 'N/A';
+            case 'age': return calculateAge(member.dob);
+            case 'gender': return member.gender || 'N/A';
+            case 'dob': return formatDate(member.dob);
+            case 'relation': return member.relation || 'N/A';
+            case 'fatherName': return member.fatherName || 'N/A';
+            case 'motherName': return member.motherName || 'N/A';
+            case 'education': return member.education || 'N/A';
+            case 'occupation': return member.occupation || 'N/A';
+            default: return 'N/A';
+        }
+    }
+    
+    // ✅ UPDATED: Added houseNo label
+    function getColumnLabel(column) {
+        const labels = {
+            'houseNo': 'House No',
+            'head': 'Head',
+            'name': 'Name',
+            'age': 'Age',
+            'gender': 'Gender',
+            'dob': 'Date of Birth',
+            'relation': 'Relation',
+            'fatherName': 'Father Name',
+            'motherName': 'Mother Name',
+            'education': 'Education',
+            'occupation': 'Occupation'
+        };
+        return labels[column] || column;
+    }
+    
+    // ✅ UPDATED: Store house number mapping from response
+    async function generateReport() {
+        if (selectedColumns.length === 0) {
+            alert('Please select at least one column');
+            return;
+        }
+        
+        // Get filter values
+        const headOnly = headOnlySelected;
+        const ageFilterType = selectedColumns.includes('age') ? document.getElementById('ageFilterType').value : 'all';
+        const ageFilter = ageFilterType === 'all' ? 'all' : 'range';
+        const startAge = ageFilterType === 'range' ? parseInt(document.getElementById('startAge').value) : null;
+        const endAge = ageFilterType === 'range' ? parseInt(document.getElementById('endAge').value) : null;
+        
+        // Validate age range
+        if (ageFilter === 'range' && (isNaN(startAge) || isNaN(endAge) || startAge > endAge)) {
+            alert('Please enter valid age range');
+            return;
+        }
+        
+        try {
+            // Build form data
+            const formData = new FormData();
+            formData.append('headOnly', headOnly ? 'true' : 'false');
+            formData.append('ageFilter', ageFilter);
+            if (startAge !== null) formData.append('startAge', startAge);
+            if (endAge !== null) formData.append('endAge', endAge);
+            selectedColumns.forEach(col => formData.append('columns', col));
+            
+            // Fetch data from server
+            const response = await fetch('/report/retrieve', {
+                method: 'POST',
+                body: formData
+            });
+            
+            if (!response.ok) {
+                throw new Error('Failed to retrieve report data');
+            }
+            
+            const data = await response.json();
+            reportData = data.members || [];
+            houseNoMapping = data.houseNoMapping || {}; // ✅ NEW: Store mapping
+            
+            // Create table headers
+            const thead = document.getElementById('tableHead');
+            thead.innerHTML = '<tr>' + selectedColumns.map(col => `<th>${getColumnLabel(col)}</th>`).join('') + '</tr>';
+            
+            // Create table body
+            const tbody = document.getElementById('tableBody');
+            if (reportData.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="' + selectedColumns.length + '" style="text-align:center;">No data found</td></tr>';
+            } else {
+                tbody.innerHTML = reportData.map(member => 
+                    '<tr>' + selectedColumns.map(col => `<td>${getColumnValue(member, col)}</td>`).join('') + '</tr>'
+                ).join('');
+            }
+            
+            // Show report info
+            const reportInfo = document.getElementById('reportInfo');
+            let infoText = `Total Records: ${reportData.length}`;
+            if (headOnly) {
+                infoText += ' | Showing: Heads Only';
+            } else {
+                infoText += ' | Showing: All Members';
+            }
+            if (ageFilter === 'range') {
+                infoText += ` | Age Range: ${startAge} - ${endAge}`;
+            } else if (selectedColumns.includes('age')) {
+                infoText += ' | Age Filter: All Ages';
+            }
+            reportInfo.textContent = infoText;
+            
+            document.getElementById('reportTable').style.display = 'block';
+            document.getElementById('pdfBtn').style.display = 'inline-block';
+            
+        } catch (error) {
+            console.error('Error:', error);
+            alert('Error retrieving report data: ' + error.message);
+        }
+    }
+    
+    function downloadPDF() {
+        if (reportData.length === 0) {
+            alert('Please generate report first');
+            return;
+        }
+        
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+        
+        // Add title
+        doc.setFontSize(16);
+        doc.text('Family Report', 14, 15);
+        
+        // Add report info
+        doc.setFontSize(10);
+        const reportInfo = document.getElementById('reportInfo').textContent;
+        doc.text(reportInfo, 14, 22);
+        
+        // Prepare table data
+        const tableData = reportData.map(member => 
+            selectedColumns.map(col => getColumnValue(member, col))
+        );
+        
+        const headers = selectedColumns.map(col => getColumnLabel(col));
+        
+        // Add table using autoTable plugin
+        doc.autoTable({
+            head: [headers],
+            body: tableData,
+            startY: 28,
+            styles: { fontSize: 8 },
+            headStyles: { fillColor: [35, 126, 166] },
+            alternateRowStyles: { fillColor: [245, 245, 245] }
+        });
+        
+        // Save the PDF
+        doc.save('family_report.pdf');
+    }
+</script>
+</body>
+</html>

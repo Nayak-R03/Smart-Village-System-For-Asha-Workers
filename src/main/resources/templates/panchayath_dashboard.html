@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Panchayath Dashboard - Smart Village System</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+</head>
+<body class="sv-theme">
+<div class="center">
+    <div class="form-container">
+        <h2>Panchayath Announcement</h2>
+        
+        <div class="card">
+            <form th:action="@{/admin/panchayath/announcement}" method="post">
+                <label>Announcement: 
+                    <textarea name="description" rows="4" placeholder="Enter announcement details..." required></textarea>
+                </label>
+                <label>Venue: <input name="venue" placeholder="Meeting venue"/></label>
+                <label>Sender Name: <input name="senderName" placeholder="Your name"/></label>
+                <button type="submit" class="btn success">Submit Announcement</button>
+            </form>
+        </div>
+        
+        <div th:if="${announcements != null and !announcements.empty}">
+            <h3>Previous Announcements</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date & Time</th>
+                        <th>Description</th>
+                        <th>Venue</th>
+                        <th>Sender</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="announcement : ${announcements}">
+                        <td th:text="${announcement.dateTime}"></td>
+                        <td th:text="${announcement.description}"></td>
+                        <td th:text="${announcement.venue}"></td>
+                        <td th:text="${announcement.senderName}"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="buttons">
+            <a class="btn secondary" th:href="@{/admin/login}">Back</a>
+        </div>
+    </div>
+</div>
+</body>
+</html>

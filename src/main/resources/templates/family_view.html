@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>View Family Members - SVHRS</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+</head>
+<body class="sv-theme">
+<div class="center">
+    <div class="form-container">
+        <h2>Family Members</h2>
+
+        <div class="card">
+            <table class="styled-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>DOB</th>
+                        <th>Gender</th>
+                        <th>Relation</th>
+                        <th>Spouse</th>
+                        <th>Father Name</th>
+                        <th>Mother Name</th>
+                        <th>Education</th>
+                        <th>Occupation</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Head Row -->
+                    <tr th:if="${head != null}">
+                        <td th:text="${head.id}"></td>
+                        <td th:text="${head.name}"></td>
+                        <td th:text="${head.dob}"></td>
+                        <td th:text="${head.gender}"></td>
+                        <td th:text="${head.relation}"></td>
+                        <td th:text="${head.spouse != null ? head.spouse : 'N/A'}"></td>
+                        <td th:text="${head.fatherName != null ? head.fatherName : 'N/A'}"></td>
+                        <td th:text="${head.motherName != null ? head.motherName : 'N/A'}"></td>
+                        <td th:text="${head.education != null ? head.education : 'N/A'}"></td>
+                        <td th:text="${head.occupation != null ? head.occupation : 'N/A'}"></td>
+                    </tr>
+                    <!-- Member Rows -->
+                    <tr th:each="member : ${members}">
+                        <td th:text="${member.id}"></td>
+                        <td th:text="${member.name}"></td>
+                        <td th:text="${member.dob}"></td>
+                        <td th:text="${member.gender}"></td>
+                        <td th:text="${member.relation}"></td>
+                        <td th:text="${member.spouse != null ? member.spouse : 'N/A'}"></td>
+                        <td th:text="${member.fatherName != null ? member.fatherName : 'N/A'}"></td>
+                        <td th:text="${member.motherName != null ? member.motherName : 'N/A'}"></td>
+                        <td th:text="${member.education != null ? member.education : 'N/A'}"></td>
+                        <td th:text="${member.occupation != null ? member.occupation : 'N/A'}"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="buttons">
+            <a class="btn secondary" th:href="@{/family/list}">Back to Families</a>
+            <a class="btn secondary" th:href="@{/asha/dashboard}">Back to Dashboard</a>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Announcements - ASHA Portal</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+</head>
+<body class="sv-theme">
+<div class="center">
+    <div class="form-container">
+        <h2>Announcements for ASHA Worker</h2>
+
+        <div th:if="${announcements != null and !announcements.empty}">
+            <table>
+                <thead>
+                <tr>
+                    <th>Date & Time</th>
+                    <th>Description</th>
+                    <th>Venue</th>
+                    <th>Sender</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="announcement : ${announcements}">
+                    <td th:text="${#temporals.format(announcement.dateTime, 'dd-MM-yyyy HH:mm')}"></td>
+                    <td th:text="${announcement.description}"></td>
+                    <td th:text="${announcement.venue}"></td>
+                    <td th:text="${announcement.senderName}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div th:if="${announcements == null or announcements.empty}" class="error">
+            <p>No announcements available.</p>
+        </div>
+
+        <div class="buttons">
+            <a class="btn secondary" th:href="@{/dashboard}">Back to Dashboard</a>
+        </div>
+    </div>
+</div>
+</body>
+</html>

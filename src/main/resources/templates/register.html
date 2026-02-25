@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>New Asha Registration</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body class="sv-theme">
+<div class="center">
+    <div class="form-container">
+        <h2>New Asha Registration</h2>
+
+        <div th:if="${error}" style="color:red;">
+            <p th:text="${error}"></p>
+        </div>
+        <div th:if="${message}" style="color:green;">
+            <p th:text="${message}"></p>
+        </div>
+
+        <form th:action="@{/register}" th:object="${asha}" method="post" class="card">
+            <label>Asha ID: <input th:field="*{ashaId}" required/></label><br/>
+            <label>Name: <input th:field="*{name}" required/></label><br/>
+            <label>Date of Birth: <input th:field="*{dob}" type="date" required/></label><br/>
+            <label>Mobile: <input th:field="*{mobile}" required/></label><br/>
+            <label>Email: <input th:field="*{email}" type="email" /></label><br/>
+            <label>Password: <input th:field="*{password}" type="password" required/></label><br/>
+            <label>Confirm Password: <input th:field="*{confirmPassword}" type="password" required/></label><br/>
+
+            <!-- State Dropdown -->
+            <label for="state">State:</label>
+            <select id="state" name="state" required>
+                <option value="">--Select State--</option>
+            </select>
+            <br>
+
+            <!-- District Dropdown -->
+            <label for="district">District:</label>
+            <select id="district" name="district" required>
+                <option value="">--Select District--</option>
+            </select>
+            <br>
+
+            <!-- Taluk Dropdown -->
+            <label for="taluk">Taluk:</label>
+            <select id="taluk" name="taluk" required>
+                <option value="">--Select Taluk--</option>
+            </select>
+            <br>
+
+            <!-- Village Dropdown -->
+            <label for="village">Village:</label>
+            <select id="village" name="village" required>
+                <option value="">--Select Village--</option>
+            </select>
+            <br>
+
+            <!-- Ward Dropdown -->
+            <label for="ward">Ward:</label>
+            <select id="ward" name="ward" required>
+                <option value="">--Select Ward--</option>
+            </select>
+            <br>
+
+            <div style="margin-top: 30px;">
+                <button type="submit" class="btn success">Register</button>
+            </div>
+        </form>
+
+        <div class="buttons" style="margin-top: 20px;">
+            <a th:href="@{/login}" class="btn primary">Login here</a>
+            <a th:href="@{/}" class="btn secondary">Back to Home</a>
+        </div>
+    </div>
+</div>
+
+<!-- JavaScript to load dropdowns dynamically -->
+<script>
+    $(document).ready(function () {
+        // Load States on page load
+        $.getJSON("/api/locations/states", function (states) {
+            $.each(states, function (i, state) {
+                $("#state").append('<option value="' + state.id + '">' + state.name + '</option>');
+            });
+        });
+
+        // Load Districts based on State
+        $("#state").change(function () {
+            let stateId = $(this).val();
+            $("#district").empty().append('<option value="">--Select District--</option>');
+            $("#taluk").empty().append('<option value="">--Select Taluk--</option>');
+            $("#village").empty().append('<option value="">--Select Village--</option>');
+            $("#ward").empty().append('<option value="">--Select Ward--</option>');
+
+            if (stateId) {
+                $.getJSON("/api/locations/districts/" + stateId, function (districts) {
+                    $.each(districts, function (i, d) {
+                        $("#district").append('<option value="' + d.id + '">' + d.name + '</option>');
+                    });
+                });
+            }
+        });
+
+        // Load Taluks based on District
+        $("#district").change(function () {
+            let districtId = $(this).val();
+            $("#taluk").empty().append('<option value="">--Select Taluk--</option>');
+            $("#village").empty().append('<option value="">--Select Village--</option>');
+            $("#ward").empty().append('<option value="">--Select Ward--</option>');
+
+            if (districtId) {
+                $.getJSON("/api/locations/taluks/" + districtId, function (taluks) {
+                    $.each(taluks, function (i, t) {
+                        $("#taluk").append('<option value="' + t.id + '">' + t.name + '</option>');
+                    });
+                });
+            }
+        });
+
+        // Load Villages based on Taluk
+        $("#taluk").change(function () {
+            let talukId = $(this).val();
+            $("#village").empty().append('<option value="">--Select Village--</option>');
+            $("#ward").empty().append('<option value="">--Select Ward--</option>');
+
+            if (talukId) {
+                $.getJSON("/api/locations/villages/" + talukId, function (villages) {
+                    $.each(villages, function (i, v) {
+                        $("#village").append('<option value="' + v.id + '">' + v.name + '</option>');
+                    });
+                });
+            }
+        });
+
+        // Load Wards based on Village
+        $("#village").change(function () {
+            let villageId = $(this).val();
+            $("#ward").empty().append('<option value="">--Select Ward--</option>');
+
+            if (villageId) {
+                $.getJSON("/api/locations/wards/" + villageId, function (wards) {
+                    $.each(wards, function (i, w) {
+                        $("#ward").append('<option value="' + w.id + '">' + w.name + '</option>');
+                    });
+                });
+            }
+        });
+    });
+</script>
+</body>
+</html>

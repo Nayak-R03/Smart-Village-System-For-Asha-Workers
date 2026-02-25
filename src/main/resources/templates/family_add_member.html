@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Add Family Member - SVHRS</title>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to right, #1f416b, #237ea6);
+            color: #fff;
+            padding: 40px;
+        }
+        h2 {
+            color: #fff;
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        form {
+            background-color: rgba(255, 255, 255, 0.15);
+            padding: 25px;
+            border-radius: 10px;
+            max-width: 400px;
+            margin: auto;
+        }
+        label {
+            display: block;
+            margin-bottom: 12px;
+        }
+        input, select {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            border: none;
+            border-radius: 5px;
+        }
+        button {
+            background-color: #237ea6;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: block;
+            margin: 20px auto;
+        }
+        button:hover {
+            background-color: #1f416b;
+        }
+        a {
+            display: block;
+            text-align: center;
+            color: #fff;
+            margin-top: 15px;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+<h2>Add Family Member</h2>
+
+<form th:action="@{'/family/addMember/' + ${headId}}" th:object="${newMember}" method="post">
+    <input type="hidden" th:if="${from != null}" name="from" th:value="${from}"/>
+
+    <label>Name:
+        <input th:field="*{name}" required/>
+    </label>
+
+    <label>DOB:
+        <input th:field="*{dob}" type="date" required/>
+    </label>
+
+    <label>Gender:
+        <select th:field="*{gender}" required>
+            <option value="">--Select--</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+            <option value="Other">Other</option>
+        </select>
+    </label>
+
+    <label>Spouse:
+        <input th:field="*{spouse}"/>
+    </label>
+
+    <label>Father Name:
+        <input th:field="*{fatherName}"/>
+    </label>
+
+    <label>Mother Name:
+        <input th:field="*{motherName}"/>
+    </label>
+
+    <label>Education:
+        <input th:field="*{education}"/>
+    </label>
+
+    <label>Occupation:
+        <input th:field="*{occupation}"/>
+    </label>
+
+    <button type="submit">Add</button>
+</form>
+
+<a th:href="@{/asha/dashboard}">Back to Dashboard</a>
+
+</body>
+</html>

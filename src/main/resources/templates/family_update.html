@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Update Family Member - SVHRS</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+</head>
+<body class="sv-theme">
+<div class="center">
+    <div class="form-container">
+        <h2>Update Family Member</h2>
+
+        <div class="card">
+            <form th:action="@{'/family/updateMember/' + ${member.id}}" th:object="${member}" method="post">
+                <label>Name: <input th:field="*{name}" required/></label>
+                <label>DOB: <input th:field="*{dob}" type="date" required/></label>
+                <label>Gender:
+                    <select th:field="*{gender}" required>
+                        <option value="">--Select--</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </label>
+                <label>Spouse: <input th:field="*{spouse}" /></label>
+                <label>Father Name: <input th:field="*{fatherName}" /></label>
+                <label>Mother Name: <input th:field="*{motherName}" /></label>
+                <label>Education: <input th:field="*{education}" /></label>
+                <label>Occupation: <input th:field="*{occupation}" /></label>
+
+                <button type="submit" class="btn success">Save Changes</button>
+            </form>
+        </div>
+
+        <div class="buttons">
+            <a class="btn secondary" th:href="@{'/family/update/' + ${member.headId}}">Back to Family</a>
+            <a class="btn secondary" th:href="@{/asha/dashboard}">Back to Dashboard</a>
+        </div>
+    </div>
+</div>
+</body>
+</html>

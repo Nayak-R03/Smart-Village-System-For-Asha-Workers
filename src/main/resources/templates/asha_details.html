@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>ASHA Details - Smart Village System</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+</head>
+<body class="sv-theme">
+<div class="center">
+    <div class="form-container">
+        <h2>ASHA Details</h2>
+        
+        <div th:if="${ashas != null and !ashas.empty}">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ASHA ID</th>
+                        <th>Name</th>
+                        <th>Date of Birth</th>
+                        <th>Mobile</th>
+                        <th>Email</th>
+                        <th>State</th>
+                        <th>District</th>
+                        <th>Taluk</th>
+                        <th>Village</th>
+                        <th>Ward</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="asha : ${ashas}">
+                        <td th:text="${asha.ashaId}"></td>
+                        <td th:text="${asha.name}"></td>
+                        <td th:text="${asha.dob}"></td>
+                        <td th:text="${asha.mobile}"></td>
+                        <td th:text="${asha.email}"></td>
+                        <td th:text="${asha.state}"></td>
+                        <td th:text="${asha.district}"></td>
+                        <td th:text="${asha.taluk}"></td>
+                        <td th:text="${asha.village}"></td>
+                        <td th:text="${asha.ward}"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div th:if="${ashas == null or ashas.empty}" class="error">
+            <p>No ASHA records found.</p>
+        </div>
+        
+        <div class="buttons">
+            <a class="btn secondary" th:href="@{/admin/healthcare/dashboard}">Back to Dashboard</a>
+        </div>
+    </div>
+</div>
+</body>
+</html>
